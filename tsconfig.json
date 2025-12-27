@@ -11,8 +11,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["jest"]
   },
-  "include": ["src"],
-  "exclude": ["src/__tests__/**"]
+  "include": ["src", "src/__tests__/**/*.ts", "src/__tests__/**/*.tsx", "src/__tests__/**/*.js"]
 }

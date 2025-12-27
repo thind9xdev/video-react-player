@@ -111,6 +111,7 @@
     "@babel/preset-typescript": "^7.26.5",
     "@cfaester/enzyme-adapter-react-18": "^0.8.0",
     "@types/classnames": "^2.3.1",
+    "@types/jest": "^30.0.0",
     "@types/lodash.throttle": "^4.1.9",
     "@types/prop-types": "^15.7.12",
     "@types/react": "^18.3.12",

@@ -51,4 +51,17 @@ describe('FullscreenToggle', () => {
     );
     expect(wrapper.hasClass('video-react-player-icon-fullscreen')).toBe(true);
   });
+
+  it('should call actions.toggleFullscreen with player on click', () => {
+    const toggleFullscreen = jest.fn();
+    const player = { isFullscreen: false };
+    const wrapper = shallow(
+      <FullscreenToggle actions={{ toggleFullscreen }} player={player} />
+    );
+
+    wrapper.simulate('click');
+
+    expect(toggleFullscreen).toHaveBeenCalledTimes(1);
+    expect(toggleFullscreen).toHaveBeenCalledWith(player);
+  });
 });
