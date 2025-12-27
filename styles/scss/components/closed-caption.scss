@@ -1,0 +1,13 @@
+.video-react-player {
+  .video-react-player-closed-caption {
+    cursor: pointer;
+    @include flex(none);
+    @extend .video-react-player-icon;
+    @extend .video-react-player-icon-closed-caption;
+  }
+
+  video::-webkit-media-text-track-container {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+}

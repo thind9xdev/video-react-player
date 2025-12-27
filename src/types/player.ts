@@ -1,0 +1,30 @@
+export interface PlayerState {
+  currentSrc: string | null;
+  duration: number;
+  currentTime: number;
+  seekingTime: number;
+  buffered: TimeRanges | null;
+  textTracks: TextTrackList | TextTrack[] | null;
+  waiting: boolean;
+  seeking: boolean;
+  paused: boolean;
+  autoPaused: boolean;
+  ended: boolean;
+  playbackRate: number;
+  muted: boolean;
+  volume: number;
+  readyState: number;
+  networkState: number;
+  videoWidth: number;
+  videoHeight: number;
+  hasStarted: boolean;
+  userActivity: boolean;
+  isActive: boolean;
+  isFullscreen: boolean;
+  isPictureInPicture: boolean;
+  loop: boolean;
+  isTheater: boolean;
+  quality: string;
+  activeTextTrack: TextTrack | null;
+  error?: string;
+}

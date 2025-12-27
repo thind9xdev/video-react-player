@@ -1,0 +1,59 @@
+.video-react-player-menu-button {
+  cursor: pointer;
+
+  // Change cursor back to default if the menu button is disabled
+  &.video-react-player-disabled {
+    cursor: default;
+  }
+}
+
+
+.video-react-player-menu {
+  .video-react-player-menu-content {
+    display: block;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    font-family: $video-react-player-text-font-family;
+  }
+
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0.2em 0;
+    line-height: 1.4em;
+    font-size: 1.2em;
+    text-align: center;
+
+    &:focus,
+    &:hover {
+      outline: 0;
+      @include background-color-with-alpha($video-react-player-secondary-background-color, $video-react-player-secondary-background-transparency);
+    }
+
+
+    &.video-react-player-selected,
+    &.video-react-player-selected:focus,
+    &.video-react-player-selected:hover {
+      background-color: $video-react-player-primary-foreground-color;
+      color: $video-react-player-primary-background-color;
+    }
+
+    &.vjs-menu-title {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 1em;
+      line-height: 2em;
+      padding: 0;
+      margin: 0 0 0.3em 0;
+      font-weight: bold;
+      cursor: default;
+    }
+
+  }
+}
+
+// prevent menus from opening while scrubbing (FF, IE)
+.video-react-player-scrubbing .vjs-menu-button:hover .video-react-player-menu {
+  display: none;
+}

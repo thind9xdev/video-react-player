@@ -1,0 +1,150 @@
+{
+  "name": "video-react-player",
+  "version": "0.1.1",
+  "description": "video-react-player is a web video player built from the ground up for an HTML5 world using React library.",
+  "main": "dist/video-react-player.cjs.js",
+  "module": "dist/video-react-player.es.js",
+  "style": "dist/video-react-player.css",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "BABEL_ENV=test jest",
+    "test:watch": "BABEL_ENV=test jest --watch",
+    "test:coverage": "BABEL_ENV=test jest --coverage",
+    "build:types": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && npm run build:types && rollup -c",
+    "prebuild": "cross-env BABEL_ENV=lib-dir babel src --out-dir lib --extensions \".ts,.tsx,.js\" --ignore src/__tests__/**",
+    "create-release": "npm test && sh ./scripts/release",
+    "create-major": "sh ./scripts/release major",
+    "create-minor": "sh ./scripts/release minor",
+    "create-patch": "sh ./scripts/release patch",
+    "publish-release": "npm test && sh ./scripts/publish",
+    "lint": "eslint --ext .js,.ts,.tsx src",
+    "format-all": "prettier --config .prettierrc.js --write \"src/**/*.{js,ts,tsx,json,md}\" \"*.{js,json,md}\"",
+    "format-one": "prettier --config .prettierrc.js --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx,css,md}": [
+      "npm run format-one",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thind9xdev/video-react-player.git"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "dist/video-react-player.cjs.js",
+    "dist/video-react-player.es.js",
+    "dist/video-react-player.css",
+    "dist/**/*.d.ts",
+    "dist/actions/**/*",
+    "dist/components/**/*",
+    "dist/reducers/**/*",
+    "dist/types/**/*",
+    "dist/utils/**/*",
+    "styles/**/*",
+    "tonic-example.js"
+  ],
+  "keywords": [
+    "react",
+    "video",
+    "video-react-player",
+    "react-video",
+    "video-react-19",
+    "player",
+    "component",
+    "components",
+    "react-component",
+    "react-components",
+    "react component",
+    "react components",
+    "ui"
+  ],
+  "contributors": [
+    "Junmin Liu",
+    "Mengdi Chen",
+    "Tianxiao Wang",
+    "Xincun Li",
+    "Jing Sun",
+    "Xiaolei Chen",
+    "Xiangkun Yang",
+    "Thind9xdev"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thind9xdev/video-react-player/issues"
+  },
+  "homepage": "https://github.com/thind9xdev/video-react-player#readme",
+  "tonicExampleFilename": "tonic-example.js",
+  "dependencies": {
+    "@babel/runtime": "^7.4.5",
+    "classnames": "^2.2.6",
+    "lodash.throttle": "^4.1.1",
+    "prop-types": "^15.7.2",
+    "redux": "^4.0.1"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.26.5",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.26.5",
+    "@cfaester/enzyme-adapter-react-18": "^0.8.0",
+    "@types/classnames": "^2.3.1",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/prop-types": "^15.7.12",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^24.8.0",
+    "conventional-changelog-cli": "^1.3.22",
+    "conventional-recommended-bump": "^1.0.0",
+    "cross-env": "^2.0.0",
+    "deep-freeze": "0.0.1",
+    "enzyme": "^3.10.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "husky": "^1.3.1",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.2.0",
+    "prettier": "^2.8.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup": "^1.15.1",
+    "rollup-plugin-babel": "^4.2.0",
+    "rollup-plugin-babel-minify": "^7.0.0",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.4",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-sass": "^1.2.2",
+    "sass": "^1.70.0",
+    "sinon": "^1.17.6",
+    "typescript": "^5.7.0"
+  }
+}
