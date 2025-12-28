@@ -1,3 +1,20 @@
+<a name="0.2.0"></a>
+# 0.2.0 (2025-12-28)
+
+
+### Bug Fixes
+
+* fix player ([574b4fc](https://github.com/thind9xdev/video-react-player/commit/574b4fc))
+* rebuild ([23e21b9](https://github.com/thind9xdev/video-react-player/commit/23e21b9))
+
+
+### Features
+
+* new react player ([1562002](https://github.com/thind9xdev/video-react-player/commit/1562002))
+* update test ([2b9c753](https://github.com/thind9xdev/video-react-player/commit/2b9c753))
+
+
+
 <a name="0.21.4"></a>
 ## 0.21.4 (2025-12-26)
 
