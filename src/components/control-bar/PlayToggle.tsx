@@ -47,6 +47,8 @@ const PlayToggle = forwardRef<HTMLButtonElement, PlayToggleProps>(
   }
 );
 
+(PlayToggle as unknown as { controlId?: string }).controlId = 'PlayToggle';
+
 PlayToggle.displayName = 'PlayToggle';
 
 export default PlayToggle;

@@ -58,6 +58,32 @@ export function isVideoChild(c: ReactNode): boolean {
 const find = <T>(elements: T[], func: (value: T) => boolean): T | undefined =>
   elements.find(func);
 
+export const getDisplayName = (
+  type: React.ComponentType | string | { displayName?: string; render?: unknown }
+): string | undefined => {
+  if (typeof type === 'string') return type;
+  if (typeof type === 'function') return type.displayName || type.name;
+  if (type && typeof type === 'object') {
+    const typed = type as {
+      displayName?: string;
+      render?: { displayName?: string; name?: string };
+    };
+    return typed.displayName || typed.render?.displayName || typed.render?.name;
+  }
+  return undefined;
+};
+
+export const getControlId = (
+  type: React.ComponentType | string | { render?: unknown }
+): string | undefined => {
+  if (!type || typeof type === 'string') return undefined;
+  const typed = type as {
+    controlId?: string;
+    render?: { controlId?: string };
+  };
+  return typed.controlId || typed.render?.controlId;
+};
+
 // check if two components are the same type
 const isTypeEqual = (
   component1: ReactElement,
@@ -66,15 +92,33 @@ const isTypeEqual = (
   const type1 = component1.type as React.ComponentType | string;
   const type2 = component2.type as React.ComponentType | string;
 
+  if (type1 === type2) return true;
+
+  const controlId1 = getControlId(type1);
+  const controlId2 = getControlId(type2);
+
+  if (controlId1 && controlId1 === controlId2) {
+    return true;
+  }
+
   if (typeof type1 === 'string' || typeof type2 === 'string') {
     return type1 === type2;
   }
 
-  if (typeof type1 === 'function' && typeof type2 === 'function') {
-    return type1.displayName === type2.displayName;
+  const displayName1 = getDisplayName(type1);
+  const displayName2 = getDisplayName(type2);
+
+  if (!displayName1 || !displayName2) {
+    return false;
   }
 
-  return false;
+  if (displayName1 === displayName2) {
+    return true;
+  }
+
+  return (
+    displayName1.endsWith(displayName2) || displayName2.endsWith(displayName1)
+  );
 };
 
 // merge default children
