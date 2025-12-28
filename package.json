@@ -13,6 +13,7 @@
     "build:types": "tsc --project tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && npm run build:types && rollup -c",
+    "prepack": "npm run build",
     "prebuild": "cross-env BABEL_ENV=lib-dir babel src --out-dir lib --extensions \".ts,.tsx,.js\" --ignore src/__tests__/**",
     "create-release": "npm test && sh ./scripts/release",
     "create-major": "sh ./scripts/release major",

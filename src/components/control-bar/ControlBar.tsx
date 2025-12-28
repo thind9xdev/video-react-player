@@ -11,7 +11,7 @@ import React from 'react';
 
 import type { ActionCreators } from '../../Manager';
 import type { PlayerState } from '../../reducers/player';
-import { mergeAndSortChildren } from '../../utils';
+import { getControlId, getDisplayName, mergeAndSortChildren } from '../../utils';
 import CurrentTimeDisplay from '../time-controls/CurrentTimeDisplay';
 import DurationDisplay from '../time-controls/DurationDisplay';
 import TimeDivider from '../time-controls/TimeDivider';
@@ -36,12 +36,6 @@ const asDefaultChild = (element: React.ReactElement) =>
   element as React.ReactElement;
 
 const getDefaultChildren = () => [
-  asDefaultChild(
-    React.createElement(PlayToggle as React.ComponentType<any>, {
-      key: 'play-toggle',
-      order: 1,
-    })
-  ),
   asDefaultChild(
     React.createElement(VolumeMenuButton as React.ComponentType<any>, {
       key: 'volume-menu-button',
@@ -95,11 +89,58 @@ const ControlBar: React.FC<ControlBarProps> = ({
   const hasCoreProps = Boolean(parentProps.actions && parentProps.player);
   const defaultChildren =
     disableDefaultControls || !hasCoreProps ? [] : getDefaultChildren();
+
+  const hasUserPlayToggle = React.Children.toArray(children).some((child) => {
+    if (!React.isValidElement(child)) return false;
+    const name = getDisplayName(child.type);
+    return (
+      child.type === PlayToggle ||
+      name === 'PlayToggle' ||
+      (name ? name.endsWith('PlayToggle') : false)
+    );
+  });
+
+  const isPlayToggleName = (name?: string) =>
+    name === 'PlayToggle' || (name ? name.endsWith('PlayToggle') : false);
+
+  const defaultsWithOptionalPlayToggle = [
+    !disableDefaultControls &&
+      asDefaultChild(
+        React.createElement(PlayToggle as React.ComponentType<any>, {
+          key: 'play-toggle',
+          order: 1,
+        })
+      ),
+    ...defaultChildren,
+  ].filter(Boolean) as React.ReactElement[];
+
+  const effectiveDefaults = hasUserPlayToggle
+    ? defaultsWithOptionalPlayToggle.filter((c) => {
+        const id = getControlId(c.type as React.ComponentType | string);
+        const name = getDisplayName(c.type as React.ComponentType | string);
+        return !(id === 'PlayToggle' || isPlayToggleName(name));
+      })
+    : defaultsWithOptionalPlayToggle;
+
+  const seen = new Set<string>();
   const mergedChildren = mergeAndSortChildren(
-    defaultChildren,
+    effectiveDefaults,
     children,
     parentProps
-  );
+  ).filter((child) => {
+    if (!React.isValidElement(child)) return false;
+    const id = getControlId(child.type as React.ComponentType | string);
+    const name = getDisplayName(child.type as React.ComponentType | string);
+
+    if (!id && !name) return true;
+
+    // Normalize PlayToggle across different bundles/wrappers so it dedupes reliably.
+    const normalizedId = id || (isPlayToggleName(name) ? 'PlayToggle' : undefined);
+    const key = normalizedId ? `id:${normalizedId}` : `name:${name}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   return (
     <div
