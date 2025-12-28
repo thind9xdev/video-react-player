@@ -1,29 +1,16 @@
 #!/usr/bin/env bash
-
 set -e
 
 BUMP_TYPE=$1
-
-if [ -z "$TRAVIS" ]; then
-  git checkout main
-  git pull
-  npm install
-fi
-
 CURRENT_BRANCH="$(git symbolic-ref --short -q HEAD)"
 
 success() {
-  echo -e "\033[32;1m$1"
+  echo -e "\033[32;1m$1\033[0m"
 }
 
 error() {
-  echo -e "\033[31;1m$1"
+  echo -e "\033[31;1m$1\033[0m"
 }
-
-# if [ -z "$GITHUB_TOKEN" ]; then
-#   error "Environment variable GITHUB_TOKEN does not exist. Stopping deploy."
-#   exit 1
-# fi
 
 if [ -z "$CURRENT_BRANCH" ]; then
   error "Not in a branch. Stopping release."
@@ -31,32 +18,43 @@ if [ -z "$CURRENT_BRANCH" ]; then
 fi
 
 if [ -z "$BUMP_TYPE" ]; then
-  echo "Grabbing recommended bump type..."
-  BUMP_TYPE="$(node_modules/.bin/conventional-recommended-bump -p angular)"
+  echo "Detecting recommended bump type..."
+  BUMP_TYPE="$(npx conventional-recommended-bump -p angular)"
 fi
 
 if [ -z "$BUMP_TYPE" ]; then
-  error "Unable to set the type of version bump"
+  error "Unable to determine version bump type"
   exit 1
 fi
 
-echo "==> Bumping version"
-VERSION="$(npm version --no-git-tag-version $BUMP_TYPE | sed 's/v//g')"
+# Install deps only when local
+if [ -z "$CI" ]; then
+  npm install
+fi
 
-echo "==> Updating Changelog"
-node_modules/.bin/conventional-changelog -i CHANGELOG.md -o CHANGELOG.md -p angular
+echo "==> Bumping version ($BUMP_TYPE)"
+VERSION="$(npm version --no-git-tag-version "$BUMP_TYPE" | sed 's/v//g')"
 
-echo "==> Cleaning Build directory"
-rm -rf ./dist
+# Check npm version
+PKG_NAME="$(node -p "require('./package.json').name")"
+if npm view "$PKG_NAME@$VERSION" >/dev/null 2>&1; then
+  error "Version $VERSION already exists on npm"
+  exit 0
+fi
 
-echo "==> Creating build files"
+echo "==> Updating CHANGELOG"
+npx conventional-changelog -i CHANGELOG.md -o CHANGELOG.md -p angular
+
+echo "==> Cleaning build"
+rm -rf dist
+
+echo "==> Building"
 npm run build
 
-echo "==> Committing changes"
-
+echo "==> Creating release branch"
 git checkout -b "release-$VERSION"
-git add --all
-git commit --message "chore(release): adding $VERSION"
-git push --set-upstream origin "release-$VERSION" > /dev/null 2>&1
+git add .
+git commit -m "chore(release): $VERSION"
+git push origin "release-$VERSION"
 
-success "release-$VERSION branch has been pushed. Verify at https://github.com/thind9xdev/video-react-player/tree/release-$VERSION"
+success "Release branch release-$VERSION created"
