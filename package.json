@@ -1,6 +1,6 @@
 {
   "name": "video-react-player",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "video-react-player is a web video player built from the ground up for an HTML5 world using React library.",
   "main": "dist/video-react-player.cjs.js",
   "module": "dist/video-react-player.es.js",
